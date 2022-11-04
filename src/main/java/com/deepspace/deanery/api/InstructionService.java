@@ -3,7 +3,7 @@ package com.deepspace.deanery.api;
 import com.deepspace.deanery.model.Instruction;
 import com.deepspace.dto.ExpulsionPercentageCourseResponse;
 import com.deepspace.dto.ExpulsionPercentageYearResponse;
-import com.deepspace.dto.ShortInstructionDTO;
+import com.deepspace.dto.projection.ShortInstructionDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -20,7 +20,7 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/status")
-    public List<StudentCountResponse> findGroupByStatus() {
+    public List<StudentCountResponse> findAllGroupByStatus() {
         return new ArrayList<>(); //FIXME
     }
 

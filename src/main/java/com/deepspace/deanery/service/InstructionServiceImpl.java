@@ -1,6 +1,5 @@
 package com.deepspace.deanery.service;
 
-import com.deepspace.deanery.api.DictionaryService;
 import com.deepspace.deanery.api.InstructionService;
 import com.deepspace.deanery.exception.DeaneryException;
 import com.deepspace.deanery.model.Instruction;
@@ -10,15 +9,13 @@ import com.deepspace.deanery.repository.InstructionRepository;
 import com.deepspace.deanery.repository.StudentRepository;
 import com.deepspace.dto.ExpulsionPercentageCourseResponse;
 import com.deepspace.dto.ExpulsionPercentageYearResponse;
-import com.deepspace.dto.ShortInstructionDTO;
+import com.deepspace.dto.projection.ShortInstructionDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -77,7 +74,7 @@ public class InstructionServiceImpl implements InstructionService {
 
     @Override
     public Page<ShortInstructionDTO> searchPage(Pageable pageable) {
-        return instructionRepository.findAllByDeletedIsFalse(pageable);
+        return instructionRepository.findAllByIsDeletedIsFalse(pageable);
     }
 
     @Override
