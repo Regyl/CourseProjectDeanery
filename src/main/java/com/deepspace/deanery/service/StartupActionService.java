@@ -141,8 +141,8 @@ public class StartupActionService {
                     .fullName(fullName)
                     .studentStatus(getRandomDictionaryItem(studentStatusDics))
                     .gradeBookNumber(UUID.randomUUID().toString())
-                    .eduStart(LocalDate.now()) //FIXME
-                    .eduEnd(LocalDate.now()) //FIXME
+                    .eduStart(LocalDate.now().minusYears(RANDOM.nextInt(10)))
+                    .eduEnd(LocalDate.now().minusYears(RANDOM.nextInt(5)))
                     .studentGroup(getRandomDictionaryItem(studentGroups))
                     .course(RANDOM.nextInt(4))
                     .build();
@@ -162,6 +162,7 @@ public class StartupActionService {
                     .instructionType(getRandomDictionaryItem(instructionTypeDics))
                     .payload(FAKER.harryPotter().book())
                     .students(getRandomDictionaryItems(students, 5))
+                    .date(LocalDate.now().minusYears(RANDOM.nextInt(10)))
                     .build();
             instructions.add(instruction);
         }

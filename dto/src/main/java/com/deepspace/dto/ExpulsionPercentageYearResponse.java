@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpulsionPercentageResponse {
+public class ExpulsionPercentageYearResponse {
 
     private Double percentage;
 
-    private Integer course;
+    private Integer year;
 }
