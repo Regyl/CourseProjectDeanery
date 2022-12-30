@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import static com.deepspace.deanery.RandomUtils.getRandomDictionaryItem;
 import static com.deepspace.deanery.RandomUtils.getRandomDictionaryItems;
@@ -138,13 +137,13 @@ public class StartupActionService {
                     .middleName(FAKER.funnyName().name())
                     .build();
             Student student = Student.builder()
-                    .fullName(fullName)
+//                    .fullName(fullName)
                     .studentStatus(getRandomDictionaryItem(studentStatusDics))
-                    .gradeBookNumber(UUID.randomUUID().toString())
+//                    .gradeBookNumber(UUID.randomUUID().toString())
                     .eduStart(LocalDate.now().minusYears(RANDOM.nextInt(10)))
                     .eduEnd(LocalDate.now().minusYears(RANDOM.nextInt(5)))
                     .studentGroup(getRandomDictionaryItem(studentGroups))
-                    .course(RANDOM.nextInt(4))
+//                    .course(RANDOM.nextInt(4))
                     .build();
             students.add(student);
         }

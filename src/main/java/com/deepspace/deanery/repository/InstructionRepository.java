@@ -14,5 +14,4 @@ public interface InstructionRepository extends AbstractJpaRepository<Instruction
 
     Set<Instruction> findAllByInstructionTypeValue(InstructionTypeDic.Value instructionType);
 
-    Page<ShortInstructionDTO> findAllByIsDeletedIsFalse(Pageable pageable);
 }

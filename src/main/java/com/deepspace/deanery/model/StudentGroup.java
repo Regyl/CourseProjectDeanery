@@ -33,6 +33,10 @@ public class StudentGroup extends AbstractEntity {
     @Column(nullable = false)
     private Short number;
 
+    @NotNull
+    @Column(nullable = false)
+    private Integer course;
+
     @Override
     public String toString() {
         return studentGroupPrefix.getValue().toString() + "-" + number;

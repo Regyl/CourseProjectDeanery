@@ -24,7 +24,7 @@ public abstract class AbstractEntity {
     @GeneratedValue
     private UUID id;
 
-    @EqualsAndHashCode.Exclude
+    /*@EqualsAndHashCode.Exclude
     @CreationTimestamp
     @Column(nullable = false)
     private OffsetDateTime createDateTime;
@@ -35,5 +35,5 @@ public abstract class AbstractEntity {
     private OffsetDateTime updateDateTime;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean isDeleted;
+    private boolean isDeleted;*/
 }

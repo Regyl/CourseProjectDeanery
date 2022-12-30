@@ -35,6 +35,7 @@ public class InstructionTypeDic extends AbstractDictionary {
         PASS_A_DORM,
         ACADEMIC_LEAVE,
         EXPULSION,
-        GRADUATION
+        GRADUATION,
+        GROUP_CHANGE
     }
 }

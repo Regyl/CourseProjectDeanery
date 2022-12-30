@@ -1,7 +1,7 @@
 package com.deepspace.deanery.model;
 
-import com.deepspace.deanery.model.dictionary.StudentStatusDic;
 import com.deepspace.deanery.model.embedded.FullName;
+import com.deepspace.deanery.model.embedded.PassportInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -21,22 +20,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Student extends AbstractEntity {
+public class Human extends AbstractEntity {
 
     @NotNull
-    @ManyToOne(optional = false)
-    private StudentStatusDic studentStatus;
+    @Embedded
+    private FullName fullName;
 
     @NotNull
     @Column(nullable = false)
-    private LocalDate eduStart;
+    private String gradeBookNumber;
 
-    @Column
-    private LocalDate eduEnd;
+    @NotNull
+    @Column(nullable = false)
+    private LocalDate birthDate;
 
-    @ManyToOne(optional = false)
-    private StudentGroup studentGroup;
-
-    @ManyToOne(optional = false)
-    private Human human;
+    @NotNull
+    @Embedded
+    private PassportInfo passportInfo;
 }

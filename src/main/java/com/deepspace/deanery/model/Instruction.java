@@ -50,6 +50,9 @@ public class Instruction extends AbstractEntity {
     @NotNull
     @Column(nullable = false)
     private LocalDate date;
+
+    @ManyToOne
+    private InstructionGroup instructionGroup;
 }
 
 
