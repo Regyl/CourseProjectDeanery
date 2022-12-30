@@ -3,7 +3,9 @@ package com.deepspace.deanery.service;
 import com.deepspace.deanery.api.DictionaryService;
 import com.deepspace.deanery.config.StartupProperties;
 import com.deepspace.deanery.exception.DeaneryException;
+import com.deepspace.deanery.model.Human;
 import com.deepspace.deanery.model.Instruction;
+import com.deepspace.deanery.model.InstructionGroup;
 import com.deepspace.deanery.model.Student;
 import com.deepspace.deanery.model.StudentGroup;
 import com.deepspace.deanery.model.dictionary.CathedraDic;
@@ -12,6 +14,9 @@ import com.deepspace.deanery.model.dictionary.InstructionTypeDic;
 import com.deepspace.deanery.model.dictionary.StudentGroupPrefixDic;
 import com.deepspace.deanery.model.dictionary.StudentStatusDic;
 import com.deepspace.deanery.model.embedded.FullName;
+import com.deepspace.deanery.model.embedded.PassportInfo;
+import com.deepspace.deanery.repository.HumanRepository;
+import com.deepspace.deanery.repository.InstructionGroupRepository;
 import com.deepspace.deanery.repository.InstructionRepository;
 import com.deepspace.deanery.repository.StudentGroupRepository;
 import com.deepspace.deanery.repository.StudentRepository;
@@ -21,6 +26,7 @@ import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -29,11 +35,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import static com.deepspace.deanery.RandomUtils.getRandomDictionaryItem;
 import static com.deepspace.deanery.RandomUtils.getRandomDictionaryItems;
 
 @Slf4j
+//@Scope(scopeName = "PROTOTYPE")
 @Component
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "application.startup.install", havingValue = "true")
@@ -45,9 +53,11 @@ public class StartupActionService {
     private final StartupProperties startupProperties;
 
     private final DictionaryService dictionaryService;
+    private final HumanRepository humanRepository;
     private final StudentRepository studentRepository;
     private final InstructionRepository instructionRepository;
     private final StudentGroupRepository studentGroupRepository;
+    private final InstructionGroupRepository instructionGroupRepository;
     
     private List<CathedraDic> cathedraDics;
     private List<InstructionTypeDic> instructionTypeDics;
@@ -55,7 +65,10 @@ public class StartupActionService {
     private List<InstructionBasisDic> instructionBasisDics;
     private List<StudentGroupPrefixDic> studentGroupPrefixDics;
     private List<StudentGroup> studentGroups;
+    private List<InstructionGroup> instructionGroups;
     private List<Student> students;
+    private List<Human> humans;
+
     
 
     @Timed(description = "Startup time")
@@ -65,9 +78,11 @@ public class StartupActionService {
         dictionaryInit();
         for (StartupProperties.Table table : startupProperties.getTables()) {
             switch (table) {
+                case HUMAN -> initHumans();
                 case STUDENT -> initStudents();
                 case INSTRUCTION -> initInstructions();
                 case STUDENT_GROUP -> initStudentGroups();
+                case INSTRUCTION_GROUP -> initInstructionGroups();
             }
         }
     }
@@ -107,6 +122,33 @@ public class StartupActionService {
         dictionaryService.saveAll(studentGroupPrefixDics);
     }
 
+    private void initHumans() {
+        log.info("Human init enabled");
+
+        List<Human> humans = new ArrayList<>(startupProperties.getSize());
+        for (int i=0; i < startupProperties.getSize(); i++) {
+            Name name = FAKER.name();
+            FullName fullName = FullName.builder()
+                    .firstName(name.firstName())
+                    .lastName(name.lastName())
+                    .middleName(FAKER.funnyName().name())
+                    .build();
+            PassportInfo passportInfo = PassportInfo.builder()
+                    .series(FAKER.number().toString())
+                    .number(FAKER.number().toString())
+                    .build();
+            Human human = Human.builder()
+                    .fullName(fullName)
+                    .passportInfo(passportInfo)
+                    .gradeBookNumber(UUID.randomUUID().toString())
+                    .birthDate(LocalDate.now().minusYears(RANDOM.nextInt(60)))
+                    .build();
+            humans.add(human);
+        }
+        this.humans = humans;
+        humanRepository.saveAll(humans);
+    }
+
     private void initStudentGroups() {
         log.info("Student group table init enabled");
         List<StudentGroup> studentGroups = new ArrayList<>(startupProperties.getSize());
@@ -115,6 +157,7 @@ public class StartupActionService {
                     .cathedra(getRandomDictionaryItem(cathedraDics))
                     .studentGroupPrefix(getRandomDictionaryItem(studentGroupPrefixDics))
                     .number((short) RANDOM.nextInt(100, 200))
+                    .course(RANDOM.nextInt(4))
                     .build();
             studentGroups.add(studentGroup);
         }
@@ -124,26 +167,18 @@ public class StartupActionService {
 
     private void initStudents() {
         log.info("Students table init enabled");
-        if (studentGroups.isEmpty()) {
-            throw new DeaneryException(DeaneryException.Reason.STARTUP_EXCEPTION, "Отсутствует справочник групп студентов");
+        if (studentGroups.isEmpty() || humans.isEmpty()) {
+            throw new DeaneryException(DeaneryException.Reason.STARTUP_EXCEPTION, "Отсутствуют требуемые справочники");
         }
 
         List<Student> students = new ArrayList<>(startupProperties.getSize());
         for (int i=0; i < startupProperties.getSize(); i++) {
-            Name name = FAKER.name();
-            FullName fullName = FullName.builder()
-                    .firstName(name.firstName())
-                    .lastName(name.lastName())
-                    .middleName(FAKER.funnyName().name())
-                    .build();
             Student student = Student.builder()
-//                    .fullName(fullName)
                     .studentStatus(getRandomDictionaryItem(studentStatusDics))
-//                    .gradeBookNumber(UUID.randomUUID().toString())
                     .eduStart(LocalDate.now().minusYears(RANDOM.nextInt(10)))
                     .eduEnd(LocalDate.now().minusYears(RANDOM.nextInt(5)))
                     .studentGroup(getRandomDictionaryItem(studentGroups))
-//                    .course(RANDOM.nextInt(4))
+                    .human(getRandomDictionaryItem(humans))
                     .build();
             students.add(student);
         }
@@ -166,6 +201,19 @@ public class StartupActionService {
             instructions.add(instruction);
         }
         instructionRepository.saveAll(instructions);
+    }
+
+    private void initInstructionGroups() {
+        log.info("Instruction group table init enabled");
+        List<InstructionGroup> instructionGroups = new ArrayList<>(startupProperties.getSize());
+        for (int i=0; i < startupProperties.getSize()/10; i++) {
+            InstructionGroup instructionGroup = InstructionGroup.builder()
+                    .groupNumber(FAKER.number().toString())
+                    .build();
+            instructionGroups.add(instructionGroup);
+        }
+        this.instructionGroups = instructionGroups;
+        instructionGroupRepository.saveAllAndFlush(instructionGroups);
     }
 
 }

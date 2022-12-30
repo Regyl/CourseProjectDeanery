@@ -18,8 +18,10 @@ public class StartupProperties {
     private Integer size;
 
     public enum Table {
+        HUMAN,
         STUDENT,
         INSTRUCTION,
-        STUDENT_GROUP
+        STUDENT_GROUP,
+        INSTRUCTION_GROUP
     }
 }
