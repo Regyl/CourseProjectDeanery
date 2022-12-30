@@ -1,6 +1,5 @@
 package com.deepspace.deanery.controller.rest;
 
-import com.deepspace.deanery.api.StudentController;
 import com.deepspace.deanery.model.Student;
 import com.deepspace.deanery.repository.AbstractJpaRepository;
 import com.deepspace.deanery.repository.StudentRepository;
@@ -17,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/student")
-public class StudentControllerImpl extends AbstractCRUDController<Student> implements StudentController {
+public class StudentController extends AbstractCRUDController<Student> {
 
     private final StudentRepository repository;
 

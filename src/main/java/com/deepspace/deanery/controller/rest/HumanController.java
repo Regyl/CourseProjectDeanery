@@ -1,0 +1,19 @@
+package com.deepspace.deanery.controller.rest;
+
+import com.deepspace.deanery.model.Human;
+import com.deepspace.deanery.repository.AbstractJpaRepository;
+import com.deepspace.deanery.repository.HumanRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class HumanController extends AbstractCRUDController<Human> {
+
+    private final HumanRepository repository;
+
+    @Override
+    protected AbstractJpaRepository<Human> getRepository() {
+        return repository;
+    }
+}

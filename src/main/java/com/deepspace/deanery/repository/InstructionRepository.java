@@ -27,7 +27,7 @@ public interface InstructionRepository extends AbstractJpaRepository<Instruction
                     inner join student s on s.human_id = h.id
                     inner join instruction_students si on s.id = si.students_id
                     inner join instruction i on i.id = (select i1.id from instruction i1 where si.instruction_id = i1.id order by i1.date desc limit 1)
-                    group by s.id
+                    group by s.id, ФИО, Номер_приказа
                     """, nativeQuery = true)
     Optional<Instruction> findLastInstructionForEachStudent();
 

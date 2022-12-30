@@ -1,6 +1,5 @@
 package com.deepspace.deanery.controller.rest;
 
-import com.deepspace.deanery.api.InstructionController;
 import com.deepspace.deanery.model.Instruction;
 import com.deepspace.deanery.repository.AbstractJpaRepository;
 import com.deepspace.deanery.repository.InstructionRepository;
@@ -24,7 +23,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/instruction")
-public class InstructionControllerImpl extends AbstractCRUDController<Instruction> implements InstructionController {
+public class InstructionController extends AbstractCRUDController<Instruction> {
 
     private final InstructionRepository repository;
 
