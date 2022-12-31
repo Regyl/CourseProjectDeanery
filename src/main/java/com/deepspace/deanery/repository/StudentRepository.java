@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -62,4 +63,15 @@ public interface StudentRepository extends AbstractJpaRepository<Student> {
                     order by i.date
                     """, nativeQuery = true)
     Student findAllStudentGroupChanges(@Param("id") UUID studentId);
+
+    @Query(value = """
+                    select count(is2.students_id), is2.students_id
+                    from instruction_students is2
+                    inner join instruction i on i.id = is2.instruction_id
+                    inner join instruction_type_dic itd on itd.id = i.instruction_type_id
+                    where itd.value='ACADEMIC_LEAVE'
+                    group by is2.students_id
+                    having count(is2.students_id) >= 2
+                    """, nativeQuery = true)
+    List<Student> findAllTookAcademicRestMoreThanOnce();
 }
