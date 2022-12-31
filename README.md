@@ -8,8 +8,8 @@
    1. Percentage of expulsion students group by courses
    2. List of students whose take an academy rest more than once
    3. Percentage of expulsion each year with dynamic of changes
-   4. Quantity of students in each type of instruction with result by groups
-   5. Text of instruction
-   6. Last instruction for each student
-   7. Student moves through groups with instruction number
-   8. Quantity of learners, quantity of students in academy rest, quantity of expulsion during year, quantity of graduated group by cathedra
+   4. Quantity of students in each type of instruction with group by groups (+)
+   5. Text of instruction (+)
+   6. Last instruction for each student (+)
+   7. Student moves through groups with instruction number (+)
+   8. Quantity of learners, quantity of students in academy rest, quantity of expulsion during year, quantity of graduated group by cathedra (+)

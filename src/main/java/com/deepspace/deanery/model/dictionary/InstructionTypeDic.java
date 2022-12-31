@@ -36,6 +36,7 @@ public class InstructionTypeDic extends AbstractDictionary {
         ACADEMIC_LEAVE,
         EXPULSION,
         GRADUATION,
-        GROUP_CHANGE
+        GROUP_CHANGE,
+        MOVE_TO_THE_NEXT_COURSE
     }
 }
