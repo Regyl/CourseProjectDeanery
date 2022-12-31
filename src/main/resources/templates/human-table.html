@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <form action="http://localhost:8090">
+        <input type="submit" value="Back to main page" />
+    </form>
+<!--    <form name="creation" action="#" th:action="@{/greeting}" th:object="${greeting}" method="post">
+        <p>First name: <input type="text" th:field="*{id}" /></p>
+        <p>Last name: <input type="text" th:field="*{content}" /></p>
+        <p>Middle name: <input type="text" th:field="*{content}" /></p>
+        <p>Birth date: <input type="text" th:field="*{content}" /></p>
+        <p>Grade book number: <input type="text" th:field="*{content}" /></p>
+        <p>Passport number: <input type="text" th:field="*{content}" /></p>
+        <p>Passport number: <input type="text" th:field="*{content}" /></p>
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    </form>-->
+    <table>
+        <thead>
+        <tr>
+            <th> FullName </th>
+            <th> Grade book number </th>
+            <th> Birth date </th>
+            <th> Passport </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${entities.empty}">
+            <td colspan="2"> No humans Available </td>
+        </tr>
+        <tr th:each="entity : ${entities}">
+            <td><span th:text="${entity.fullName}"> FullName </span></td>
+            <td><span th:text="${entity.gradeBookNumber}"> Grade book number </span></td>
+            <td><span th:text="${entity.birthDate}"> Birth date </span></td>
+            <td><span th:text="${entity.passportInfo}"> Passport </span></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

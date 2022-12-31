@@ -21,4 +21,9 @@ public class PassportInfo {
     @NotNull
     @Column(nullable = false)
     private String number;
+
+    @Override
+    public String toString() {
+        return String.join(" ", series, number);
+    }
 }

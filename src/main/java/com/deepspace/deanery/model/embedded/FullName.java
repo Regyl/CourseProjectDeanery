@@ -24,4 +24,9 @@ public class FullName {
 
     @Column
     private String middleName;
+
+    @Override
+    public String toString() {
+        return String.join(" ", lastName, firstName, middleName);
+    }
 }

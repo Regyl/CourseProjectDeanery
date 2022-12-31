@@ -15,7 +15,7 @@ import java.util.List;
 @Tag(name = "Student controller")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/student")
+@RequestMapping("/students")
 public class StudentController extends AbstractCRUDController<Student> {
 
     private final StudentRepository repository;
@@ -23,6 +23,11 @@ public class StudentController extends AbstractCRUDController<Student> {
     @GetMapping("/status")
     public List<StudentCountResponse> findAllGroupByStatus() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected String getTableFilename() {
+        return "student-table";
     }
 
     @Override

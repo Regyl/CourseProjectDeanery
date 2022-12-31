@@ -5,9 +5,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <p>Добрый вечор</p>
-    <p>Выбери своего бойца</p>
-    <p>Список отчисленных, сгруппированный по курсу <a th:href="@{/instruction/expulsion/percentage/course}">here</a></p>
-<!--    <p>Список отчисленных, сгруппированный по году<a href="../templates/expulsion-list-by-year.html"></a>here</p>-->
+    <h1>Добрый вечор</h1>
+    <div>
+        <h3>Список CRUD-таблиц</h3>
+        <ul>
+            <li><a href="http://localhost:8090/humans/list">Люди</a></li>
+            <li><a href="http://localhost:8090/students/list">Студенты</a></li>
+            <li><a href="">Приказы</a></li>
+            <li><a href="">Группы приказов</a></li>
+        </ul>
+    </div>
+    <div>
+    <h3>Список специфичных SQL-запросов</h3>
+        <ul>
+            <li><a href="http://localhost:8090/instruction/expulsion/percentage/course">Список отчисленных, сгруппированный по курсу</a></li>
+            <li><a href="http://localhost:8090/instruction/expulsion/percentage/year">Список отчисленных, сгруппированный по годам</a></li>
+            <li><a href=""></a></li>
+        </ul>
+    </div>
 </body>
 </html>

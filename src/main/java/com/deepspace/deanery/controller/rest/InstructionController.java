@@ -1,5 +1,6 @@
 package com.deepspace.deanery.controller.rest;
 
+import com.deepspace.deanery.controller.rest.AbstractCRUDController;
 import com.deepspace.deanery.model.Instruction;
 import com.deepspace.deanery.repository.AbstractJpaRepository;
 import com.deepspace.deanery.repository.InstructionRepository;
@@ -44,6 +45,11 @@ public class InstructionController extends AbstractCRUDController<Instruction> {
     @PostMapping("/search")
     public Page<ShortInstructionDTO> searchInstructions(@ParameterObject Pageable pageable) {
         return repository.findAllBy(pageable);
+    }
+
+    @Override
+    protected String getTableFilename() {
+        return "instruction-table";
     }
 
     @Override

@@ -15,10 +15,14 @@ import java.util.Optional;
 @Repository
 public interface InstructionRepository extends AbstractJpaRepository<Instruction> {
 
-    @Query(value = "select * from ", nativeQuery = true)
+    @Query(value = """
+select
+""", nativeQuery = true)
     List<ExpulsionPercentageCourseResponse> getExpulsionPercentageByCourse();
 
-    @Query(value = "select * from ", nativeQuery = true)
+    @Query(value = """
+select
+""", nativeQuery = true)
     List<ExpulsionPercentageYearResponse> getExpulsionPercentageByYear(int start, int end);
 
     @Query(value = """

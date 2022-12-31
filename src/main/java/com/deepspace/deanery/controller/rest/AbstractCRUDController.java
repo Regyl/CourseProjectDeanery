@@ -4,7 +4,9 @@ import com.deepspace.deanery.api.CRUDController;
 import com.deepspace.deanery.exception.DeaneryException;
 import com.deepspace.deanery.model.AbstractEntity;
 import com.deepspace.deanery.repository.AbstractJpaRepository;
+import org.springframework.ui.Model;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -14,6 +16,8 @@ public abstract class AbstractCRUDController<T extends AbstractEntity> implement
             DeaneryException(DeaneryException.Reason.INVALID_ARGUMENT, "Сущность не найдена");
 
     protected abstract AbstractJpaRepository<T> getRepository();
+
+    protected abstract String getTableFilename();
 
     @Override
     public T create(T entity) {
@@ -38,7 +42,9 @@ public abstract class AbstractCRUDController<T extends AbstractEntity> implement
     }
 
     @Override
-    public Iterable<T> getAll() {
-        return getRepository().findAll();
+    public String getAll(Model model) {
+        List<T> entities = getRepository().findAll();
+        model.addAttribute("entities", entities);
+        return getTableFilename();
     }
 }

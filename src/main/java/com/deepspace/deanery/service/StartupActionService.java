@@ -134,8 +134,8 @@ public class StartupActionService {
                     .middleName(FAKER.funnyName().name())
                     .build();
             PassportInfo passportInfo = PassportInfo.builder()
-                    .series(FAKER.number().toString())
-                    .number(FAKER.number().toString())
+                    .series(String.valueOf(FAKER.number().randomNumber(4, Boolean.TRUE)))
+                    .number(String.valueOf(FAKER.number().randomNumber(6, Boolean.TRUE)))
                     .build();
             Human human = Human.builder()
                     .fullName(fullName)
