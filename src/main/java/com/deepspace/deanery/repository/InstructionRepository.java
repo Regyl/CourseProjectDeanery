@@ -17,13 +17,45 @@ import java.util.Optional;
 public interface InstructionRepository extends AbstractJpaRepository<Instruction> {
 
     @Query(value = """
-select
-""", nativeQuery = true)
+                    with s1 as (select sg.course, count(is2.students_id) as quantity
+                    from instruction_students is2
+                        inner join instruction i on i.id = is2.instruction_id
+                        inner join instruction_type_dic itd on itd.id = i.instruction_type_id
+                        inner join student s on s.id = is2.students_id
+                        inner join student_group sg on s.student_group_id = sg.id
+                    where itd.value='EXPULSION'
+                    group by sg.course),
+                    s2 as (
+                    select sg.course, count(is2.students_id) as quantity
+                    from instruction_students is2
+                             inner join instruction i on i.id = is2.instruction_id
+                             inner join instruction_type_dic itd on itd.id = i.instruction_type_id
+                             inner join student s on s.id = is2.students_id
+                             inner join student_group sg on s.student_group_id = sg.id
+                    where itd.value in ('MOVE_TO_THE_NEXT_COURSE', 'ENROLLMENT', 'EXPULSION')
+                    group by sg.course)
+                    select s1.quantity*100/s2.quantity as percentage, s1.course
+                    from s1
+                    left join s2 on s1.course=s2.course
+                    """, nativeQuery = true)
     List<ExpulsionPercentageCourseResponse> getExpulsionPercentageByCourse();
 
     @Query(value = """
-select
-""", nativeQuery = true)
+                    with s1 as (select date_part('year', i.date) as queryYear, count(is2.students_id) as quantity
+                    from instruction_students is2
+                    inner join instruction i on i.id = is2.instruction_id
+                    inner join instruction_type_dic itd on itd.id = i.instruction_type_id
+                    where itd.value='EXPULSION'
+                    group by queryYear),
+                    s2 as (select date_part('year', i.date) as queryYear, count(is2.students_id) as quantity
+                            from instruction_students is2
+                            inner join instruction i on i.id = is2.instruction_id
+                            inner join instruction_type_dic itd on itd.id = i.instruction_type_id
+                           where itd.value in ('MOVE_TO_THE_NEXT_COURSE', 'ENROLLMENT', 'EXPULSION')
+                           group by queryYear)
+                    select s1.quantity*100/s2.quantity as percentage, s1.queryYear from s1
+                    left join s2 on s1.queryYear=s2.queryYear
+                    """, nativeQuery = true)
     List<ExpulsionPercentageYearResponse> getExpulsionPercentageByYear(int start, int end);
 
     @Query(value = """

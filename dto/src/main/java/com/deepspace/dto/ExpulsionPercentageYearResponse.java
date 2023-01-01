@@ -11,5 +11,5 @@ public class ExpulsionPercentageYearResponse {
 
     private Double percentage;
 
-    private Integer year;
+    private Integer queryYear;
 }

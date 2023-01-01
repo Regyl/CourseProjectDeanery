@@ -5,9 +5,9 @@
    2. Instruction types are: enrollment, pass an dorm, academy rest, expulsion, graduation
    3. Student save his number of Grade book when recover at University
 4. Queries
-   1. Percentage of expulsion students group by courses
+   1. Percentage of expulsion students group by courses (+)
    2. List of students whose take an academy rest more than once (+)
-   3. Percentage of expulsion each year with dynamic of changes
+   3. Percentage of expulsion each year with dynamic of changes (+)
    4. Quantity of students in each type of instruction with group by groups (+)
    5. Text of instruction (+)
    6. Last instruction for each student (+)
