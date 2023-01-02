@@ -29,12 +29,13 @@ public class InstructionTypeDic extends AbstractDictionary {
     private Value value;
 
     public enum Value {
-        ENROLLMENT,
-        PASS_A_DORM,
-        ACADEMIC_LEAVE,
-        EXPULSION,
-        GRADUATION,
-        GROUP_CHANGE,
-        MOVE_TO_THE_NEXT_COURSE
+        ENROLLMENT, // зачисление
+        PASS_A_DORM, // получение пропуска на общежитие
+        ACADEMIC_LEAVE, // академ. отпуск
+        EXPULSION, // отчисление
+        GRADUATION, // выпуск
+        GROUP_CHANGE, //изменение группы студента
+        MOVE_TO_THE_NEXT_COURSE, //перевод на следующий курс
+        APPOINT_STUDENT_GROUP // назначение студенту группы
     }
 }

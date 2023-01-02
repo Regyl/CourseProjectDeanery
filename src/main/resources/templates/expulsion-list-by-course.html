@@ -5,6 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+<form action="http://localhost:8090">
+    <input type="submit" value="Back to main page" />
+</form>
 <ul th:each="item : ${expulsionPercentageByCourse}">
     <li th:text="'Course: ' + ${item.getCourse()} + ', percentage: ' + ${item.getPercentage()} + '%'"></li>
 </ul>

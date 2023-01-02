@@ -2,6 +2,7 @@ package com.deepspace.deanery.repository;
 
 import com.deepspace.deanery.model.Student;
 import com.deepspace.dto.projection.AcademicRestQuantityResponse;
+import com.deepspace.dto.projection.StudentGroupChangeResponse;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public interface StudentRepository extends AbstractJpaRepository<Student> {
 
     @Query(value = """
-                    select h.last_name || ' ' || h.first_name || ' ' || h.middle_name as ФИО,
+                    select h.last_name || ' ' || h.first_name || ' ' || coalesce(h.middle_name, '') as ФИО,
                            i.number as Номер_приказа, itd.value as Тип_приказа, i.payload
                     from human h
                     inner join student s on h.id = s.human_id
@@ -55,15 +56,17 @@ public interface StudentRepository extends AbstractJpaRepository<Student> {
     Map<String, Long> allStudentStatistics();
 
     @Query(value = """
-                    select i.number, is2.students_id, i.payload 
+                    select i.number as instructionNumber, cast(is2.students_id as varchar) as studentId, i.payload as instructionText, h.last_name || ' ' || h.first_name || ' ' || coalesce(h.middle_name, '') as studentName
                     from instruction i
                     inner join instruction_students is2 on i.id = is2.instruction_id
                     inner join instruction_type_dic itd on itd.id = i.instruction_type_id
-                    where itd.value='GROUP_CHANGE'
+                    inner join student s on is2.students_id = s.id
+                    inner join human h on s.human_id = h.id
+                    where itd.value in ('GROUP_CHANGE', 'APPOINT_STUDENT_GROUP')
                     and is2.students_id = #{id}
                     order by i.date
                     """, nativeQuery = true)
-    Student findAllStudentGroupChanges(@Param("id") UUID studentId);
+    StudentGroupChangeResponse findAllStudentGroupChanges(@Param("id") UUID studentId);
 
     @Query(value = """
                     select count(is2.students_id) as quantity, cast(is2.students_id as varchar) as id

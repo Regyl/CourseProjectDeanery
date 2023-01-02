@@ -17,6 +17,8 @@ public class StartupProperties {
 
     private Integer size;
 
+    private Long groupSize;
+
     public enum Table {
         HUMAN,
         STUDENT,

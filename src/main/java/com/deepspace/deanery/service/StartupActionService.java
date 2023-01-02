@@ -26,7 +26,6 @@ import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -68,8 +67,6 @@ public class StartupActionService {
     private List<InstructionGroup> instructionGroups;
     private List<Student> students;
     private List<Human> humans;
-
-    
 
     @Timed(description = "Startup time")
     @PostConstruct
@@ -131,7 +128,7 @@ public class StartupActionService {
             FullName fullName = FullName.builder()
                     .firstName(name.firstName())
                     .lastName(name.lastName())
-                    .middleName(FAKER.funnyName().name())
+//                    .middleName(FAKER.funnyName().name())
                     .build();
             PassportInfo passportInfo = PassportInfo.builder()
                     .series(String.valueOf(FAKER.number().randomNumber(4, Boolean.TRUE)))
@@ -152,12 +149,12 @@ public class StartupActionService {
     private void initStudentGroups() {
         log.info("Student group table init enabled");
         List<StudentGroup> studentGroups = new ArrayList<>(startupProperties.getSize());
-        for (int i=0; i < startupProperties.getSize()/10; i++) {
+        for (int i=0; i < startupProperties.getGroupSize(); i++) {
             StudentGroup studentGroup = StudentGroup.builder()
                     .cathedra(getRandomDictionaryItem(cathedraDics))
                     .studentGroupPrefix(getRandomDictionaryItem(studentGroupPrefixDics))
                     .number((short) RANDOM.nextInt(100, 200))
-                    .course(RANDOM.nextInt(4))
+                    .course(RANDOM.nextInt(1, 5))
                     .build();
             studentGroups.add(studentGroup);
         }
@@ -173,10 +170,11 @@ public class StartupActionService {
 
         List<Student> students = new ArrayList<>(startupProperties.getSize());
         for (int i=0; i < startupProperties.getSize(); i++) {
+            LocalDate eduStart = LocalDate.now().minusYears(RANDOM.nextInt(10));
             Student student = Student.builder()
                     .studentStatus(getRandomDictionaryItem(studentStatusDics))
-                    .eduStart(LocalDate.now().minusYears(RANDOM.nextInt(10)))
-                    .eduEnd(LocalDate.now().minusYears(RANDOM.nextInt(5)))
+                    .eduStart(eduStart)
+                    .eduEnd(eduStart.plusYears(4))
                     .studentGroup(getRandomDictionaryItem(studentGroups))
                     .human(getRandomDictionaryItem(humans))
                     .build();
@@ -190,13 +188,16 @@ public class StartupActionService {
         log.info("Instruction table init enabled");
         List<Instruction> instructions = new ArrayList<>(startupProperties.getSize());
         for (int i=0; i<startupProperties.getSize()/5; i++) {
+            InstructionTypeDic instType = getRandomDictionaryItem(instructionTypeDics);
+            String payload = getInstructionPayload(instType);
             Instruction instruction = Instruction.builder()
                     .number(FAKER.number().digits(9))
                     .instructionBasis(getRandomDictionaryItem(instructionBasisDics))
-                    .instructionType(getRandomDictionaryItem(instructionTypeDics))
-                    .payload(FAKER.harryPotter().book())
+                    .instructionType(instType)
+                    .payload(payload)
                     .students(getRandomDictionaryItems(students, 5))
                     .date(LocalDate.now().minusYears(RANDOM.nextInt(10)))
+                    .instructionGroup(getRandomDictionaryItem(instructionGroups))
                     .build();
             instructions.add(instruction);
         }
@@ -206,7 +207,7 @@ public class StartupActionService {
     private void initInstructionGroups() {
         log.info("Instruction group table init enabled");
         List<InstructionGroup> instructionGroups = new ArrayList<>(startupProperties.getSize());
-        for (int i=0; i < startupProperties.getSize()/10; i++) {
+        for (int i=0; i < startupProperties.getGroupSize(); i++) {
             InstructionGroup instructionGroup = InstructionGroup.builder()
                     .groupNumber(FAKER.number().toString())
                     .build();
@@ -214,6 +215,16 @@ public class StartupActionService {
         }
         this.instructionGroups = instructionGroups;
         instructionGroupRepository.saveAllAndFlush(instructionGroups);
+    }
+
+    private String getInstructionPayload(InstructionTypeDic instrType) {
+        return switch (instrType.getValue()) {
+            case GROUP_CHANGE ->
+                    String.format("Переход из группы %s в группу %s", getRandomDictionaryItem(studentGroups).toString(), getRandomDictionaryItem(studentGroups).toString());
+            case APPOINT_STUDENT_GROUP ->
+                    String.format("Зачисление в группу %s", getRandomDictionaryItem(studentGroups).toString());
+            default -> FAKER.harryPotter().book();
+        };
     }
 
 }

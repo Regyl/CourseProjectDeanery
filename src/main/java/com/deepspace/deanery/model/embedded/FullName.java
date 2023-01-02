@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @Builder
@@ -27,6 +29,9 @@ public class FullName {
 
     @Override
     public String toString() {
-        return String.join(" ", lastName, firstName, middleName);
+        return Stream.of(lastName, firstName, middleName)
+                .filter(s -> s != null && !s.isEmpty())
+                .collect(Collectors.joining(" "));
+//        return String.join(" ", lastName, firstName, middleName);
     }
 }

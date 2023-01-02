@@ -46,6 +46,13 @@ public class InstructionController extends AbstractCRUDController<Instruction> {
         return "quantity-of-students";
     }
 
+    @GetMapping("/last-instruction-for-each-student")
+    public String findLastInstructionForEachStudent(Model model) {
+        var instructionList = repository.findLastInstructionForEachStudent();
+        model.addAttribute("entities", instructionList);
+        return "last-instruction-for-each-student";
+    }
+
     @PostMapping("/search")
     public Page<ShortInstructionDTO> searchInstructions(@ParameterObject Pageable pageable) {
         return repository.findAllBy(pageable);
