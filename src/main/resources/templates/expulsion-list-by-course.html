@@ -6,7 +6,7 @@
 </head>
 <body>
 <ul th:each="item : ${expulsionPercentageByCourse}">
-    <li th:text="'Course: ' + ${item.getCourse()} + ', percentage: ' + ${item.getPercentage()}"></li>
+    <li th:text="'Course: ' + ${item.getCourse()} + ', percentage: ' + ${item.getPercentage()} + '%'"></li>
 </ul>
 </body>
 </html>

@@ -1,13 +1,11 @@
 package com.deepspace.deanery.controller.rest;
 
-import com.deepspace.deanery.controller.rest.AbstractCRUDController;
 import com.deepspace.deanery.model.Instruction;
 import com.deepspace.deanery.repository.AbstractJpaRepository;
 import com.deepspace.deanery.repository.InstructionRepository;
-import com.deepspace.dto.ExpulsionPercentageCourseResponse;
-import com.deepspace.dto.ExpulsionPercentageYearResponse;
+import com.deepspace.dto.projection.ExpulsionPercentageCourseResponse;
+import com.deepspace.dto.projection.ExpulsionPercentageYearResponse;
 import com.deepspace.dto.projection.ShortInstructionDTO;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -17,19 +15,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/instruction")
+@RequestMapping("/instructions")
 public class InstructionController extends AbstractCRUDController<Instruction> {
 
     private final InstructionRepository repository;
 
     @GetMapping("/expulsion/percentage/course")
-    @Operation(summary = "Percentage of expulsion group by courses")
     public String getResponse(Model model) {
         List<ExpulsionPercentageCourseResponse> expulsionPercentageByCourse = repository.getExpulsionPercentageByCourse();
         model.addAttribute("expulsionPercentageByCourse", expulsionPercentageByCourse);
@@ -37,9 +33,17 @@ public class InstructionController extends AbstractCRUDController<Instruction> {
     }
 
     @GetMapping("/expulsion/percentage/year")
-    public List<ExpulsionPercentageYearResponse> getExpulsionPercentageYearResponse(@RequestParam(required = false, defaultValue = "2015") int start,
-                                                                                    @RequestParam(required = false, defaultValue = "2030") int end) {
-        return repository.getExpulsionPercentageByYear(start, end);
+    public String getExpulsionPercentageYearResponse(Model model) {
+        List<ExpulsionPercentageYearResponse> expulsionPercentageByCourse = repository.getExpulsionPercentageByYear();
+        model.addAttribute("expulsionPercentageByYear", expulsionPercentageByCourse);
+        return "expulsion-list-by-year";
+    }
+
+    @GetMapping("/quantity-by-type")
+    public String quantityOfStudentsForEachInstructionTypeGroupByGroups(Model model) {
+        var quantityOfStudents = repository.quantityOfStudentsForEachInstructionTypeGroupByGroups();
+        model.addAttribute("entities", quantityOfStudents);
+        return "quantity-of-students";
     }
 
     @PostMapping("/search")

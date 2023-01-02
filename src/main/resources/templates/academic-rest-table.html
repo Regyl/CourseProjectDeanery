@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="http://localhost:8090">
+    <input type="submit" value="Back to main page" />
+</form>
+<table th:border="1">
+    <thead>
+    <tr>
+        <th> Идентификатор студента </th>
+        <th> Количество академических отпусков </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${entities.isEmpty()}">
+        <td colspan="2"> No response available </td>
+    </tr>
+    <tr th:each="entity : ${entities}">
+        <td><span th:text="${entity.getId()}"> Идентификатор студента </span></td>
+        <td><span th:text="${entity.getQuantity()}"> Количество академических отпусков </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

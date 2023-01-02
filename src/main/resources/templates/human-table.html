@@ -18,24 +18,24 @@
         <p>Passport number: <input type="text" th:field="*{content}" /></p>
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>-->
-    <table>
+    <table th:border="1">
         <thead>
         <tr>
-            <th> FullName </th>
-            <th> Grade book number </th>
-            <th> Birth date </th>
-            <th> Passport </th>
+            <th> ФИО </th>
+            <th> Номер студенческой книжки </th>
+            <th> Дата рождения </th>
+            <th> Паспортные данные </th>
         </tr>
         </thead>
         <tbody>
-        <tr th:if="${entities.empty}">
+        <tr th:if="${entities.isEmpty()}">
             <td colspan="2"> No humans Available </td>
         </tr>
         <tr th:each="entity : ${entities}">
-            <td><span th:text="${entity.fullName}"> FullName </span></td>
-            <td><span th:text="${entity.gradeBookNumber}"> Grade book number </span></td>
-            <td><span th:text="${entity.birthDate}"> Birth date </span></td>
-            <td><span th:text="${entity.passportInfo}"> Passport </span></td>
+            <td><span th:text="${entity.fullName}"/></td>
+            <td><span th:text="${entity.gradeBookNumber}"/></td>
+            <td><span th:text="${entity.birthDate}"/></td>
+            <td><span th:text="${entity.passportInfo}"/></td>
         </tr>
         </tbody>
     </table>

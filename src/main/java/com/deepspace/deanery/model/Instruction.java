@@ -25,7 +25,7 @@ import java.util.List;
 public class Instruction extends AbstractEntity {
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String number;
 
     @NotNull

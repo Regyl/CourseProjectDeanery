@@ -1,7 +1,5 @@
 package com.deepspace.deanery.model.dictionary;
 
-import com.deepspace.deanery.model.AbstractEntity;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

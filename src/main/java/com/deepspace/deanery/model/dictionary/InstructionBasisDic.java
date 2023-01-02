@@ -31,6 +31,6 @@ public class InstructionBasisDic extends AbstractDictionary {
     private Value value;
 
     public enum Value {
-        I_DONT_KNOW //FIXME
+        SCIENTIST_MINISTERIAL_LAW_NO_1076;
     }
 }

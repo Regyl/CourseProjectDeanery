@@ -1,6 +1,7 @@
 package com.deepspace.deanery.repository;
 
 import com.deepspace.deanery.model.Student;
+import com.deepspace.dto.projection.AcademicRestQuantityResponse;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -65,7 +66,7 @@ public interface StudentRepository extends AbstractJpaRepository<Student> {
     Student findAllStudentGroupChanges(@Param("id") UUID studentId);
 
     @Query(value = """
-                    select count(is2.students_id), is2.students_id
+                    select count(is2.students_id) as quantity, cast(is2.students_id as varchar) as id
                     from instruction_students is2
                     inner join instruction i on i.id = is2.instruction_id
                     inner join instruction_type_dic itd on itd.id = i.instruction_type_id
@@ -73,5 +74,5 @@ public interface StudentRepository extends AbstractJpaRepository<Student> {
                     group by is2.students_id
                     having count(is2.students_id) >= 2
                     """, nativeQuery = true)
-    List<Student> findAllTookAcademicRestMoreThanOnce();
+    List<AcademicRestQuantityResponse> findAllTookAcademicRestMoreThanOnce();
 }

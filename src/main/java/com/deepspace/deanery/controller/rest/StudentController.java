@@ -3,26 +3,27 @@ package com.deepspace.deanery.controller.rest;
 import com.deepspace.deanery.model.Student;
 import com.deepspace.deanery.repository.AbstractJpaRepository;
 import com.deepspace.deanery.repository.StudentRepository;
-import com.deepspace.dto.StudentCountResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.deepspace.dto.projection.AcademicRestQuantityResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Tag(name = "Student controller")
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/students")
 public class StudentController extends AbstractCRUDController<Student> {
 
     private final StudentRepository repository;
 
-    @GetMapping("/status")
-    public List<StudentCountResponse> findAllGroupByStatus() {
-        throw new UnsupportedOperationException();
+    @GetMapping("/academic-rest/more-than-one")
+    public String findAllTookAcademicRestMoreThanOnce(Model model) {
+        List<AcademicRestQuantityResponse> students = repository.findAllTookAcademicRestMoreThanOnce();
+        model.addAttribute("entities", students);
+        return "academic-rest-table";
     }
 
     @Override
