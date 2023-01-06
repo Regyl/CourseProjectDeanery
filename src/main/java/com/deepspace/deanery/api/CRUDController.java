@@ -3,7 +3,6 @@ package com.deepspace.deanery.api;
 import com.deepspace.deanery.model.AbstractEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +25,8 @@ public interface CRUDController<T extends AbstractEntity> {
     @PatchMapping("/update")
     T update(@RequestBody T entity, @RequestParam("id") UUID id);
 
-    @ResponseBody
-    @DeleteMapping("/{id}")
-    void delete(@PathVariable UUID id);
+    @PostMapping("/delete/{id}")
+    String delete(@PathVariable UUID id, Model model);
 
     @ResponseBody
     @GetMapping("/view/{id}")

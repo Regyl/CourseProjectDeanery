@@ -11,23 +11,31 @@
 <table th:border="1">
     <thead>
     <tr>
+        <th> Идентификатор студента </th>
         <th> Статус </th>
         <th> Дата начала обучения </th>
         <th> Дата окончания обучения </th>
         <th> Группа </th>
         <th> ФИО </th>
+        <th> Удаление </th>
     </tr>
     </thead>
     <tbody>
     <tr th:if="${entities.isEmpty()}">
-        <td colspan="2"> No students Available </td>
+        <td colspan="2"> No students available </td>
     </tr>
     <tr th:each="entity : ${entities}">
+        <td><span th:text="${entity.getId()}"/></td>
         <td><span th:text="${entity.getStudentStatus().getValue()}"/></td>
         <td><span th:text="${entity.getEduStart()}"/></td>
         <td><span th:text="${entity.getEduEnd()}"/></td>
         <td><span th:text="${entity.getStudentGroup()}"/></td>
         <td><span th:text="${entity.getHuman().getFullName()}"/></td>
+        <td>
+            <form action="#" th:action="@{/students/delete/{id}(id=${entity.id})}" method="post">
+                <input type="submit" value="Удалить" />
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

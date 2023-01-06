@@ -2,26 +2,32 @@ package com.deepspace.deanery.config;
 
 import com.deepspace.deanery.exception.DeaneryException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.Clock;
-import java.time.OffsetDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLException;
 
 @Slf4j
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DeaneryException.class)
-    public Map<String, Object> handleDeaneryException(DeaneryException e) {
-        log.error(e.getMessage());
+    public String handleDeaneryException(DeaneryException e, Model model) {
+        /*log.error(e.getMessage());
 
         Map<String, Object> body = new HashMap<>(3);
         body.put("timestamp", OffsetDateTime.now(Clock.systemUTC()));
         body.put("message", e.getMessage());
         body.put("reason", e.getReason());
-        return body;
+        return body;*/
+        model.addAttribute("message", e.getMessage());
+        return "sql-error";
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public String handlePSQLException(SQLException e, Model model) {
+        model.addAttribute("message", e.getMessage());
+        return "sql-error";
     }
 }

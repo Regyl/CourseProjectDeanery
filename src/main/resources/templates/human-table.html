@@ -21,10 +21,12 @@
     <table th:border="1">
         <thead>
         <tr>
+            <th> Идентификатор записи </th>
             <th> ФИО </th>
             <th> Номер студенческой книжки </th>
             <th> Дата рождения </th>
             <th> Паспортные данные </th>
+            <th> Удаление </th>
         </tr>
         </thead>
         <tbody>
@@ -32,10 +34,16 @@
             <td colspan="2"> No humans Available </td>
         </tr>
         <tr th:each="entity : ${entities}">
+            <td><span th:text="${entity.getId()}"/></td>
             <td><span th:text="${entity.fullName}"/></td>
             <td><span th:text="${entity.gradeBookNumber}"/></td>
             <td><span th:text="${entity.birthDate}"/></td>
             <td><span th:text="${entity.passportInfo}"/></td>
+            <td>
+                <form action="#" th:action="@{/humans/delete/{id}(id=${entity.id})}" method="post">
+                    <input type="submit" value="Удалить" />
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

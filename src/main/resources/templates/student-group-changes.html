@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="#" th:action="@{/students/group-changes}" method="get">
+    <label for="studentId">Идентификатор студента</label>
+    <input type="text" th:name="studentId" id="studentId">
+<!--    <span th:if="${#fields.hasErrors('studentId')}" th:errors="*{studentId}"></span>-->
+    <input type="submit" value="Показать передвижения студента">
+</form>
+<div th:if="${entities != null}">
+    <table th:border="1">
+        <thead>
+        <tr>
+            <th> ФИО </th>
+            <th> Номер приказа </th>
+            <th> Текст приказа </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entity : ${entities}">
+            <td><span th:text="${entity.getFullName()}"/></td>
+            <td><span th:text="${entity.getInstructionNumber()}"/></td>
+            <td><span th:text="${entity.getPayload()}"/></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:if="${entities == null}">
+    <p>Нет данных или не отправлен запрос</p>
+</div>
+<form action="http://localhost:8090">
+    <input type="submit" value="Back to main page"/>
+</form>
+</body>
+</html>

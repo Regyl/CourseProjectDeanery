@@ -11,6 +11,7 @@
 <table th:border="1">
     <thead>
     <tr>
+        <th> Идентификатор записи</th>
         <th> Номер приказа </th>
         <th> Основание приказа </th>
         <th> Тип </th>
@@ -18,6 +19,7 @@
         <th> Примечания </th>
         <th> Дата </th>
         <th> Номер группы приказов </th>
+        <th> Удаление </th>
     </tr>
     </thead>
     <tbody>
@@ -25,13 +27,19 @@
         <td colspan="2"> No Instruction Available </td>
     </tr>
     <tr th:each="entity : ${entities}">
+        <td><span th:text="${entity.getId()}"/></td>
         <td><span th:text="${entity.getNumber()}"/></td>
         <td><span th:text="${entity.getInstructionBasis().getValue()}"/></td>
         <td><span th:text="${entity.getInstructionType().getValue()}"/></td>
         <td><span th:text="${entity.getPayload()}"/></td>
         <td><span th:text="${entity.getNotes()}"/></td>
         <td><span th:text="${entity.getDate}"/></td>
-        <td><span th:text="${entity.getInstructionGroup() == null ? 'Отсутствует' : entity.getInstructionGroup().getNumber()}"/></td>
+        <td><span th:text="${entity.getInstructionGroup() == null ? 'Отсутствует' : entity.getInstructionGroup().getGroupNumber()}"/></td>
+        <td>
+            <form action="#" th:action="@{/instructions/delete/{id}(id=${entity.id})}" method="post">
+                <input type="submit" value="Удалить"/>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

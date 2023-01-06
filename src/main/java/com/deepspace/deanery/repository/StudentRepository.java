@@ -3,31 +3,31 @@ package com.deepspace.deanery.repository;
 import com.deepspace.deanery.model.Student;
 import com.deepspace.dto.projection.AcademicRestQuantityResponse;
 import com.deepspace.dto.projection.StudentGroupChangeResponse;
+import com.deepspace.dto.projection.StudentMoveResponse;
+import com.deepspace.dto.projection.StudentStatisticsItem;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Repository
 public interface StudentRepository extends AbstractJpaRepository<Student> {
 
     @Query(value = """
-                    select h.last_name || ' ' || h.first_name || ' ' || coalesce(h.middle_name, '') as ФИО,
-                           i.number as Номер_приказа, itd.value as Тип_приказа, i.payload
+                    select h.last_name || ' ' || h.first_name || ' ' || coalesce(h.middle_name, '') as fullName,
+                           i.number as instructionNumber, i.payload
                     from human h
                     inner join student s on h.id = s.human_id
                     inner join instruction_students si on s.id = si.students_id
                     inner join instruction i on si.instruction_id = i.id
                     inner join instruction_type_dic itd on i.instruction_type_id = itd.id
                     where itd.value='GROUP_CHANGE'
-                    and s.id = 'f155e357-be3e-4e1d-b646-9240e275b66d'::uuid
-                    group by s.id
-                    
+                    and s.id = :studentId
+                    group by s.id, fullName, instructionNumber, payload
                     """, nativeQuery = true)
-    Student getStudentMoves(UUID id);
+    StudentMoveResponse getStudentMoves(@Param("studentId") UUID id);
 
     @Query(value = """
                     select 'ACTIVE' as key, count(s.id) as value
@@ -53,7 +53,7 @@ public interface StudentRepository extends AbstractJpaRepository<Student> {
                     inner join instruction_students is2 on i.id = is2.instruction_id
                     where itd.value='EXPULSION' and i.date >= now() - INTERVAL '1 YEAR'
                     """, nativeQuery = true)
-    Map<String, Long> allStudentStatistics();
+    List<StudentStatisticsItem> allStudentStatistics();
 
     @Query(value = """
                     select i.number as instructionNumber, cast(is2.students_id as varchar) as studentId, i.payload as instructionText, h.last_name || ' ' || h.first_name || ' ' || coalesce(h.middle_name, '') as studentName
@@ -66,7 +66,7 @@ public interface StudentRepository extends AbstractJpaRepository<Student> {
                     and is2.students_id = #{id}
                     order by i.date
                     """, nativeQuery = true)
-    StudentGroupChangeResponse findAllStudentGroupChanges(@Param("id") UUID studentId);
+    List<StudentGroupChangeResponse> findAllStudentGroupChanges(@Param("id") UUID studentId);
 
     @Query(value = """
                     select count(is2.students_id) as quantity, cast(is2.students_id as varchar) as id

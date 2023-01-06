@@ -25,8 +25,10 @@ import com.github.javafaker.Name;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -40,10 +42,9 @@ import static com.deepspace.deanery.RandomUtils.getRandomDictionaryItem;
 import static com.deepspace.deanery.RandomUtils.getRandomDictionaryItems;
 
 @Slf4j
-//@Scope(scopeName = "PROTOTYPE")
-@Component
+@Service("StartupActionService")
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "application.startup.install", havingValue = "true")
+@ConditionalOnBean(StartupProperties.class)
 public class StartupActionService {
 
     private static final Faker FAKER = new Faker();
@@ -57,6 +58,8 @@ public class StartupActionService {
     private final InstructionRepository instructionRepository;
     private final StudentGroupRepository studentGroupRepository;
     private final InstructionGroupRepository instructionGroupRepository;
+
+    private final ApplicationContext applicationContext;
     
     private List<CathedraDic> cathedraDics;
     private List<InstructionTypeDic> instructionTypeDics;
@@ -82,6 +85,10 @@ public class StartupActionService {
                 case INSTRUCTION_GROUP -> initInstructionGroups();
             }
         }
+
+        BeanDefinitionRegistry factory =
+                (BeanDefinitionRegistry) applicationContext.getAutowireCapableBeanFactory();
+        factory.removeBeanDefinition("StartupActionService");
     }
 
     /**
@@ -206,10 +213,11 @@ public class StartupActionService {
 
     private void initInstructionGroups() {
         log.info("Instruction group table init enabled");
+
         List<InstructionGroup> instructionGroups = new ArrayList<>(startupProperties.getSize());
         for (int i=0; i < startupProperties.getGroupSize(); i++) {
             InstructionGroup instructionGroup = InstructionGroup.builder()
-                    .groupNumber(FAKER.number().toString())
+                    .groupNumber(String.valueOf(FAKER.number().randomNumber(6, Boolean.TRUE)))
                     .build();
             instructionGroups.add(instructionGroup);
         }

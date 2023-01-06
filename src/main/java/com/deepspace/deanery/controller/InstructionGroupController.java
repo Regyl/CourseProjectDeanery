@@ -1,4 +1,4 @@
-package com.deepspace.deanery.controller.rest;
+package com.deepspace.deanery.controller;
 
 import com.deepspace.deanery.model.InstructionGroup;
 import com.deepspace.deanery.repository.AbstractJpaRepository;

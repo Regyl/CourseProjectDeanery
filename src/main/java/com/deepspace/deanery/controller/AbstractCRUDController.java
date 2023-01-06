@@ -1,4 +1,4 @@
-package com.deepspace.deanery.controller.rest;
+package com.deepspace.deanery.controller;
 
 import com.deepspace.deanery.api.CRUDController;
 import com.deepspace.deanery.exception.DeaneryException;
@@ -30,9 +30,10 @@ public abstract class AbstractCRUDController<T extends AbstractEntity> implement
     }
 
     @Override
-    public void delete(UUID id) {
+    public String delete(UUID id, Model model) {
         T entity = get(id);
         getRepository().delete(entity);
+        return "redirect:/" + getTableFilename();
     }
 
     @Override
